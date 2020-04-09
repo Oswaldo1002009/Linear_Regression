@@ -25,7 +25,6 @@ def find_bin_classes(sample, temp_sample, binary, column):
 with open("otraPrueba.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     temp_samples = []
-    lines = 0
     for row in csv_reader:
         line = ','.join(row)
         line = line.split(",")
@@ -55,5 +54,14 @@ for i in range(1,len(temp_samples)):
 #print(binary)
 
 
-print(samples)
-print(y)
+#print(samples)
+#print(y)
+
+percentage = 0.8
+samples_amount = int(percentage * len(y))
+
+new_samples = samples[:samples_amount]
+tests = samples[samples_amount:]
+
+print(new_samples)
+print(tests)

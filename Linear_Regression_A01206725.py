@@ -29,7 +29,10 @@ def scaling(samples):
         sd.append(acum)
     for i in range(1, len(samples[0])): #New values
         for j in range(len(samples)):
-            samples[j][i] = (samples[j][i] - means[i]) / sd[i]
+            if sd[i]==0:
+                samples[j][i] = (samples[j][i] - means[i])
+            else:
+                samples[j][i] = (samples[j][i] - means[i]) / sd[i]
     return samples
 
 def hyp(params, samples):
@@ -82,12 +85,10 @@ def find_bin_classes(sample, temp_sample, binary, column):
             sample.append(0)
     return sample
 
-#weatherHistory
-#Create samples (all are strings)
-with open("otraPrueba.csv") as csv_file:
+#Create samples (all are strings) #otraPrueba AirQualityUCI
+with open("AirQualityUCI.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     temp_samples = []
-    lines = 0
     for row in csv_reader:
         line = ','.join(row)
         line = line.split(",")
@@ -123,7 +124,18 @@ __errors__ = []
 samples = x0(samples)
 samples = scaling(samples)
 
-for i in range(1000):
+#Cutting samples and y's
+percentage = 0.8
+samples_amount = int(percentage * len(y))
+
+test_y = y[samples_amount:]
+y = y[:samples_amount]
+
+test_samples = samples[samples_amount:]
+samples = samples[:samples_amount]
+
+#Start epochs
+for i in range(100):
     hyp_x = hyp(params, samples)
     params = gradient_descent(hyp_x, y, params, samples, alpha)
     print("New params:")
@@ -132,4 +144,12 @@ for i in range(1000):
 
 #print("Samples:")
 #print(samples)
+
+#Tests
+hyp_x = hyp(params, test_samples)
+print("Error in test data: " + str(cost_function([],hyp_x,test_y)))
+
+import matplotlib.pyplot as plt
+plt.plot(__errors__)
+plt.show()
 
