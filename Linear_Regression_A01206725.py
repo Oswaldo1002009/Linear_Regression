@@ -86,7 +86,7 @@ def find_bin_classes(sample, temp_sample, binary, column):
     return sample
 
 #Create samples (all are strings) #otraPrueba AirQualityUCI
-with open("AirQualityUCI.csv") as csv_file:
+with open("Concrete_Data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     temp_samples = []
     for row in csv_reader:
@@ -135,7 +135,7 @@ test_samples = samples[samples_amount:]
 samples = samples[:samples_amount]
 
 #Start epochs
-for i in range(100):
+for i in range(10000):
     hyp_x = hyp(params, samples)
     params = gradient_descent(hyp_x, y, params, samples, alpha)
     print("New params:")
