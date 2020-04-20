@@ -63,6 +63,12 @@ def cost_function(errors, hyp_x, y):
     errors.append(error)
     return error
 
+def calculate_accuracy(hyp, y):
+    avg_accuracy = 0.0
+    for i in range(len(hyp)):
+        avg_accuracy += min(hyp[i],y[i])/max(hyp[i],y[i])
+    return avg_accuracy/len(hyp)
+
 ###########################################################################
 #############################Start the program#############################
 ###########################################################################
@@ -85,7 +91,7 @@ def find_bin_classes(sample, temp_sample, binary, column):
             sample.append(0)
     return sample
 
-#Create samples (all are strings) #otraPrueba AirQualityUCI
+#Create samples (all are strings) #AirQualityUCI Concrete_Data
 with open("Concrete_Data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
     temp_samples = []
@@ -138,7 +144,7 @@ samples = samples[:samples_amount]
 for i in range(10000):
     hyp_x = hyp(params, samples)
     params = gradient_descent(hyp_x, y, params, samples, alpha)
-    print("New params:")
+    print("Iteration " + str(i) + ". New params:")
     print(params)
     print("Error: " + str(cost_function(__errors__, hyp_x, y)))
 
@@ -146,10 +152,13 @@ for i in range(10000):
 #print(samples)
 
 #Tests
-hyp_x = hyp(params, test_samples)
-print("Error in test data: " + str(cost_function([],hyp_x,test_y)))
+test_x = hyp(params, test_samples)
+print("Error in test data: " + str(cost_function([],test_x,test_y)))
+print("Accuracy of training data: ", calculate_accuracy(hyp_x,y))
+print("Accuracy of test data: ", calculate_accuracy(test_x,test_y))
 
 import matplotlib.pyplot as plt
-plt.plot(__errors__)
+plt.plot(__errors__, 'blue', label='training error')
+plt.title('Error for training data')
+plt.legend(loc='best')
 plt.show()
-
