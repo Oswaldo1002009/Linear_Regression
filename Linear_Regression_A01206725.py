@@ -123,7 +123,7 @@ for i in range(1,len(temp_samples)):
 
 params = list(np.zeros(len(samples[0])+1))#+1 is due b in mx + b
 
-alpha = 0.001
+alpha = 0.5
 
 __errors__ = []
 
@@ -141,7 +141,7 @@ test_samples = samples[samples_amount:]
 samples = samples[:samples_amount]
 
 #Start epochs
-for i in range(10000):
+for i in range(30):
     hyp_x = hyp(params, samples)
     params = gradient_descent(hyp_x, y, params, samples, alpha)
     print("Iteration " + str(i) + ". New params:")
@@ -158,7 +158,15 @@ print("Accuracy of training data: ", calculate_accuracy(hyp_x,y))
 print("Accuracy of test data: ", calculate_accuracy(test_x,test_y))
 
 import matplotlib.pyplot as plt
+plt.figure(1)
+plt.subplot(311)
 plt.plot(__errors__, 'blue', label='training error')
 plt.title('Error for training data')
 plt.legend(loc='best')
+plt.subplot(313)
+plt.plot(test_x, 'bo')
+plt.plot(test_y, 'yo')
+plt.subplot(312)
+plt.plot(hyp_x, 'bo')
+plt.plot(y, 'yo')
 plt.show()
